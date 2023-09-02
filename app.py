@@ -32,8 +32,6 @@ def recognize_audio_from_microphone(language="en-US"):
             frequency_penalty=0,
             presence_penalty=0,
             stop=None,
-            # temperature=0.7,
-            #max_tokens=500
         )
 
         transcription = response.choices[0].text.strip()
@@ -87,12 +85,12 @@ def index():
 @app.route('/start-recording', methods=['GET', 'POST'])
 def start_recording():
     recognizer = sr.Recognizer()
-    
+
     try:
         with sr.Microphone() as source:
             print("Say something...")
             audio = recognizer.listen(source)
-        
+
         text = recognizer.recognize_google(audio)
         print("You said:", text)
         return jsonify({"text": text})
@@ -102,11 +100,28 @@ def start_recording():
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
         return jsonify({"text": "Request error"})
-    
-@app.route('/recognize-audio', methods=['POST'])
-def recognize_audio():
-    # (Previous code for audio recognition, not shown for brevity)
-    return redirect(url_for('index'))
+
+@app.route('/record-and-transcribe', methods=['GET', 'POST'])
+def record_and_transcribe():
+    if request.method == 'POST':
+        recognizer = sr.Recognizer()
+
+        try:
+            with sr.Microphone() as source:
+                print("Say something...")
+                audio = recognizer.listen(source)
+
+            transcribed_text = recognizer.recognize_google(audio)
+            return render_template('transcribe.html', transcribed_text=transcribed_text)
+
+        except sr.UnknownValueError:
+            error_message = "Sorry, I could not understand what you said."
+            flash(error_message, "error")
+        except sr.RequestError as e:
+            error_message = f"Could not request results from Google Speech Recognition service; {str(e)}"
+            flash(error_message, "error")
+
+    return render_template('record.html')
 
 @app.route('/add-task', methods=['POST'])
 def add_task():
