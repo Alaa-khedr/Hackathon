@@ -1,0 +1,63 @@
+/* Apply global styles if needed */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    overflow-y: scroll;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Style buttons */
+.btn {
+    width: 100%; /* Make buttons expand to container width */
+    margin-bottom: 10px;
+}
+
+/* Additional styling for specific buttons if needed */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Style task items */
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    margin-bottom: 10px;
+}
+
+.task-item.completed label {
+    text-decoration: line-through;
+}
+
+/* Style search input and buttons */
+#searchInput {
+    width: 80%; /* Adjust width as needed */
+    padding: 5px;
+    margin-right: 10px;
+}
+
+#search-container {
+    position: absolute;
+    top: 20px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+}
+
+
+/* Highlighted word */
+.highlighted-word {
+    background-color: yellow; /* or any other color you prefer */
+}

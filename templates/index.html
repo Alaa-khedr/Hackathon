@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #d4d4d4;
+            margin-bottom: 10px;
+        }
+        .task-item.completed label {
+            text-decoration: line-through;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Management</h1>
+        
+        <form action="/add-task" method="POST" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="task" class="form-control" placeholder="Add a new task" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+
+        <form action="/upload-and-convert" method="POST" class="mb-3">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input file-input" id="file" name="file" accept=".mp3,.mp4,.wav,.flac,.ogg,.webm">
+                    <label class="custom-file-label" for="file">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-success">Upload & Convert</button>
+                </div>
+            </div>
+        </form>
+
+        <form action="/start-recording" method="POST" class="mb-3">
+            <button type="submit" class="btn btn-primary">Start Recording</button>
+        </form>
+
+        <ul class="task-list">
+            {% for index, (task, completed) in tasks %}
+                <li class="task-item {% if completed %}completed{% endif %}">
+                    <input type="checkbox" id="task-{{ index }}" {% if completed %}checked{% endif %}>
+                    <label for="task-{{ index }}">{{ task }}</label>
+                    <a href="{{ url_for('complete_task', task_index=index) }}" class="btn btn-secondary btn-sm">
+                        {% if completed %}Mark Incomplete{% else %}Mark Complete{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div id="output"></div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for a word">
+            <button id="searchButton">Search</button>
+            <button id="clearSearchButton" style="display: none;">Clear Search</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Update file input label text
+        document.getElementById('file').addEventListener('change', function () {
+            var fileName = this.value.split('\\').pop();
+            var label = document.querySelector('.custom-file-label');
+            label.textContent = fileName;
+        });
+    </script>
+</body>
+</html>
